@@ -6,10 +6,10 @@ GO_PACKAGE := github.com/odacremolbap/k8stest
 # injected vars
 VERSION := $(shell cat VERSION)
 DATE= $(shell date +%FT%T)
-GIT_COMMIT= $(shell git rev-parse --short HEAD)
-LDFLAG_VER := -X $(GO_PACKAGE)/appinfo.Version=$(VERSION)
-LDFLAG_DATE := -X $(GO_PACKAGE)/appinfo.Date=$(DATE)
-LDFLAG_GIT := -X $(GO_PACKAGE)/appinfo.GitCommit=$(GIT_COMMIT)
+GIT_VERSION= $(shell git describe --tags --long --dirty --always)
+LDFLAG_VER := -X $(GO_PACKAGE)/model.version=$(VERSION)
+LDFLAG_DATE := -X $(GO_PACKAGE)/model.date=$(DATE)
+LDFLAG_GIT := -X $(GO_PACKAGE)/model.gitVersion=$(GIT_VERSION)
 LDFLAG_STATIC :=-extldflags "-static"
 GOOSES := darwin freebsd linux windows
 GOARCHS := amd64 386
@@ -23,6 +23,9 @@ default: pushcontainer
 
 compile_linux: *.go VERSION
 	$(call build,linux,amd64)
+
+compile_osx: *.go VERSION
+		$(call build,darwin,amd64)
 
 cross_compile: *.go VERSION
 	$(foreach GOARCH,$(GOARCHS),$(foreach GOOS,$(GOOSES),$(call build,$(GOOS),$(GOARCH))))

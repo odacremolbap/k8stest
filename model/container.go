@@ -23,13 +23,17 @@ type ContainerEnv struct {
 
 // ContainerInterface holds container net interfaces info
 type ContainerInterface struct {
-	Name string
+	Name      string
+	Addresses []InterfaceAddresses
 }
 
-// hostName, err := os.Hostname()
-// if err != nil {
-// 	return "", err
-// }
+// InterfaceAddresses holds addresses assigned to an interface
+type InterfaceAddresses struct {
+	IP      string
+	Mask    string
+	CIDR    string
+	Network string
+}
 
 // GetContainerInfo return container information struct
 func GetContainerInfo() (*ContainerInfo, error) {
@@ -53,18 +57,6 @@ func GetContainerInfo() (*ContainerInfo, error) {
 	}
 
 	return containerInfo, nil
-
-	// for _, iface := range interfaces {
-	// 	addrs, err := iface.Addrs()
-	// 	if err != nil {
-	// 		return "", err
-	// 	}
-	// 	for i := range addrs {
-	// 		hostInfo = fmt.Sprintf("%s\n%s-address-%d: %s", hostInfo, iface.Name, i, addrs[i].String())
-	// 	}
-	// }
-	//
-	// return hostInfo, nil
 }
 
 // getContainerInterfaces return container interfaces struct
@@ -78,19 +70,31 @@ func getContainerInterfaces() ([]ContainerInterface, error) {
 	containerInterfaces := make([]ContainerInterface, len(interfaces), len(interfaces))
 	for i := range interfaces {
 		containerInterfaces[i].Name = interfaces[i].Name
+		addrs, err := interfaces[i].Addrs()
+		if err != nil {
+			return nil, err
+		}
+
+		interfaceAddresses := make([]InterfaceAddresses, len(addrs), len(addrs))
+		for j := range addrs {
+			switch addr := addrs[j].(type) {
+			case *net.IPAddr:
+				interfaceAddresses[j].Network = addr.Network()
+				interfaceAddresses[j].IP = addr.IP.String()
+				interfaceAddresses[j].Mask = addr.IP.DefaultMask().String()
+				interfaceAddresses[j].CIDR = addr.String()
+			case *net.IPNet:
+				interfaceAddresses[j].Network = addr.Network()
+				interfaceAddresses[j].IP = addr.IP.String()
+				interfaceAddresses[j].Mask = addr.IP.DefaultMask().String()
+				interfaceAddresses[j].CIDR = addr.String()
+			default:
+				interfaceAddresses[j].Network = addr.Network()
+				interfaceAddresses[j].CIDR = addr.String()
+			}
+		}
+		containerInterfaces[i].Addresses = interfaceAddresses
 	}
 
 	return containerInterfaces, nil
-
-	// for _, iface := range interfaces {
-	// 	addrs, err := iface.Addrs()
-	// 	if err != nil {
-	// 		return "", err
-	// 	}
-	// 	for i := range addrs {
-	// 		hostInfo = fmt.Sprintf("%s\n%s-address-%d: %s", hostInfo, iface.Name, i, addrs[i].String())
-	// 	}
-	// }
-	//
-	// return hostInfo, nil
 }

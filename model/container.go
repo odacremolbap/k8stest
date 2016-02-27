@@ -3,6 +3,7 @@ package model
 import (
 	"net"
 	"os"
+	"strings"
 )
 
 var containerInfo *ContainerInfo
@@ -50,9 +51,12 @@ func GetContainerInfo() (*ContainerInfo, error) {
 			return nil, err
 		}
 
+		containerEnvironment := getContainerEnvironment()
+
 		containerInfo = &ContainerInfo{
 			Hostname:   hostName,
 			Interfaces: containerInterfaces,
+			EnvVars:    containerEnvironment,
 		}
 	}
 
@@ -97,4 +101,18 @@ func getContainerInterfaces() ([]ContainerInterface, error) {
 	}
 
 	return containerInterfaces, nil
+}
+
+// getContainerEnvironment return container environment variables struct
+func getContainerEnvironment() []ContainerEnv {
+	envVars := os.Environ()
+	containerEnvs := make([]ContainerEnv, len(envVars), len(envVars))
+
+	for i := range envVars {
+		env := strings.Split(envVars[i], "=")
+		containerEnvs[i].Name = env[0]
+		containerEnvs[i].Value = env[1]
+	}
+
+	return containerEnvs
 }

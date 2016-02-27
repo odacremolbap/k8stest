@@ -50,14 +50,8 @@ func GetIndexPage() (*template.Template, error) {
       {{end}}
 
       {{range .ContainerInfo.EnvVars}}
-      <dt>envvar</dt>
-      <dd>found</dd>
-      {{end}}
-
-      {{range .ContainerInfo.EnvVars}}
       <dt>{{.Name}}</dt><dd>{{.Value}}</dd>
       {{end}}
-
 
       </body></html>
 `)

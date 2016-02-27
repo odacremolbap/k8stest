@@ -32,9 +32,9 @@ cross_compile: *.go VERSION
 
 buildcontainer: compile_linux
 	cp ./releases/linux/amd64/$(BIN_NAME) ./docker/k8stest
-	pushd ./docker && \
+	cd ./docker/ && \
 	docker build -t pmercado/k8stest . && \
-	popd
+	cd ..
 
 pushcontainer: buildcontainer
 	docker push pmercado/k8stest

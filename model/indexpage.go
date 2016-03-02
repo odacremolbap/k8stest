@@ -34,10 +34,22 @@ const index string = `
 		<title>k8s test</title>
 		<meta charset="utf-8">
 		<style>
-		body {
-		font-family: "Lato","sans-serif";
+		* {
+			font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+			padding: 0;
+			margin: 0;
+			position: relative;
+			font-size: 1rem;
+			line-height: 1.5;
 		}
-
+		body {
+			color: #888;
+			height: 100%;
+		}
+		h1 {
+			font-size: 2rem;
+			margin-top: 1rem;
+		}
 		table {
 		font-family: "Lato","sans-serif";	}		/* added custom font-family  */
 
@@ -71,7 +83,7 @@ const index string = `
 </style>
 
 
-Host
+<h1>Host</h1>
 <table>
   <tr>
     <th>name</th>
@@ -82,8 +94,22 @@ Host
   </tr>
 </table>
 
+<h1>Environment variables</h1>
+<table>
+  <tr>
+    <th>name</th>
+    <th>value</th>
+  </tr>
+{{range .ContainerInfo.EnvVars}}
+<tr>
+	<td>{{.Name}}</dt><td>{{.Value}}</dd>
+</tr>
+{{end}}
+</table>
+
+
 {{range .ContainerInfo.Interfaces}}
-Net Interface {{.Name}}
+<h1>Net Interface: {{.Name}}</h1>
 <table>
   <tr>
     <th>name</th>
@@ -107,19 +133,6 @@ Net Interface {{.Name}}
 {{end}}
 
 
-Environment variables
-
-<table>
-  <tr>
-    <th>name</th>
-    <th>value</th>
-  </tr>
-{{range .ContainerInfo.EnvVars}}
-<tr>
-	<td>{{.Name}}</dt><td>{{.Value}}</dd>
-</tr>
-{{end}}
-</table>
 
 
 </body></html>

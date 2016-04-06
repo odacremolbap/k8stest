@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/odacremolbap/k8stest/handlers"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
+
+	"github.com/odacremolbap/k8stest/handlers"
 )
 
 var hits int
@@ -57,4 +58,8 @@ func createRoutes() {
 	http.HandleFunc("/", handlers.RootHandler)
 	http.HandleFunc("/containerinfo", handlers.ContainerInfoHandler)
 	http.HandleFunc("/appinfo", handlers.AppInfoHandler)
+	http.HandleFunc("/callenv", handlers.CallEnvServiceHandler)
+	http.HandleFunc("/exit0", handlers.CleanOutHandler)
+	http.HandleFunc("/exit1", handlers.ErrOutHandler)
+
 }

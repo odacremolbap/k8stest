@@ -2,14 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"github.com/odacremolbap/k8stest/model"
 	"log"
 	"net/http"
-
-	"github.com/odacremolbap/k8stest/model"
 )
 
-// ContainerInfoHandler takes care of container info requests
-func ContainerInfoHandler(w http.ResponseWriter, r *http.Request) {
+// CallEnvServiceHandler takes care of container info requests
+func CallEnvServiceHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received request for %s", r.URL.Path)
 
 	containerInfo, err := model.GetContainerInfo()

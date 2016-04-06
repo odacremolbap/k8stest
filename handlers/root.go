@@ -1,14 +1,15 @@
 package handlers
 
 import (
-	"github.com/odacremolbap/k8stest/model"
 	"log"
 	"net/http"
+
+	"github.com/odacremolbap/k8stest/model"
 )
 
 // RootHandler takes care of root site requests
 func RootHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("[Root]Received request for %s", r.URL.Path)
+	log.Printf("Received request for %s", r.URL.Path)
 
 	t, err := model.GetIndexPage()
 	if err != nil {

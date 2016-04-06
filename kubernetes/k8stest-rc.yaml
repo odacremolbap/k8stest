@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: k8s-test-controller
+spec:
+  replicas: 5
+  selector:
+    name: "k8s-test"
+  template:
+    metadata:
+      labels:
+        name: "k8s-test"
+        version: "stable"
+  spec:
+    containers:
+    - env:
+      - name: "K8STEST_PORT"
+        value: "9898"
+      image: "pmercado/k8stest"
+      imagePullPolicy: "Always"
+      name: "k8s-simple-test"
+      ports:
+      - containerPort: 9898
+        protocol: "TCP"

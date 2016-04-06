@@ -26,7 +26,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: k8s-test-service
 spec:
   ports:
   - port: 9898

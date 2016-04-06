@@ -22,3 +22,15 @@ spec:
         ports:
         - containerPort: 9898
           protocol: "TCP"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  ports:
+  - port: 9898
+    targetPort: 80
+    protocol: TCP
+  selector:
+    name: "k8s-test"

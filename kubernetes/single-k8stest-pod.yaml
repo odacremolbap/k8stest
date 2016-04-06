@@ -8,16 +8,13 @@ metadata:
   namespace: "default"
 spec:
   containers:
-    -
-      env:
-        -
-          name: "K8STEST_PORT"
-          value: "9898"
-      image: "pmercado/k8stest"
-      imagePullPolicy: "Always"
-      name: "k8s-simple-test"
-      ports:
-        -
-          containerPort: 9898
-          protocol: "TCP"
+  - env:
+    - name: "K8STEST_PORT"
+      value: "9898"
+    image: "pmercado/k8stest"
+    imagePullPolicy: "Always"
+    name: "k8s-simple-test"
+    ports:
+    - containerPort: 9898
+      protocol: "TCP"
   restartPolicy: "Always"
